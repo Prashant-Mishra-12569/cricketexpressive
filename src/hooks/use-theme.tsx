@@ -7,6 +7,7 @@ interface ThemeContextType {
   theme: Theme;
   setTheme: (theme: Theme) => void;
   toggleTheme: () => void;
+  isDark: boolean;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -26,6 +27,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
   
   const [theme, setTheme] = useState<Theme>(getInitialTheme);
+  const isDark = theme === 'dark';
   
   const actualSetTheme = (newTheme: Theme) => {
     const root = window.document.documentElement;
@@ -51,8 +53,21 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     actualSetTheme(theme);
   }, []);
   
+  // Update theme when system preference changes
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = () => {
+      if (!localStorage.getItem('cricket-theme')) {
+        actualSetTheme(mediaQuery.matches ? 'dark' : 'light');
+      }
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
+  
   return (
-    <ThemeContext.Provider value={{ theme, setTheme: actualSetTheme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, setTheme: actualSetTheme, toggleTheme, isDark }}>
       {children}
     </ThemeContext.Provider>
   );

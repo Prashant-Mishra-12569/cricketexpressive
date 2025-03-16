@@ -9,6 +9,7 @@ import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
 import CricketChatbot from '../components/CricketChatbot';
 import { Link } from 'react-router-dom';
+import NewsGrid from '../components/NewsGrid';
 
 const Index = () => {
   const { theme } = useTheme();
@@ -64,13 +65,19 @@ const Index = () => {
         <div className="cricket-container">
           <div className="w-full h-60 sm:h-72 rounded-lg overflow-hidden shadow-md">
             <img 
-              src="/lovable-uploads/5e53f18f-c6fa-4c89-b9e3-efe4bc72c9ea.png" 
+              src="/lovable-uploads/e7d840d2-b6d0-459b-a3a3-5bd73dba393e.png" 
               alt="Feature Banner" 
               className="w-full h-full object-cover"
             />
           </div>
         </div>
       </section>
+      
+      {/* Top Stories */}
+      <TopStories />
+      
+      {/* IPL News Section */}
+      <NewsGrid category="IPL" title="IPL 2025 News" limit={7} />
       
       {/* Match Coverage */}
       <section className={`py-8 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
@@ -146,7 +153,8 @@ const Index = () => {
         </div>
       </section>
       
-      <TopStories />
+      {/* Women's Cricket Section */}
+      <NewsGrid category="Women's Cricket" title="Women's Cricket" limit={5} />
       
       <FeaturedContent />
       

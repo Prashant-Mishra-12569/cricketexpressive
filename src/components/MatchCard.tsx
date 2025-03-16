@@ -64,7 +64,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
             <Badge variant="outline" className="bg-white/20 hover:bg-white/30 text-white border-none">
               {getMatchTypeLabel()}
             </Badge>
-            <span>{match.venue.split(',')[0]}</span>
+            <span className="truncate max-w-[120px]">{match.venue.split(',')[0]}</span>
           </div>
           <Badge 
             variant={isCompleted ? "secondary" : "outline"} 
@@ -82,7 +82,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
         {/* Team 1 */}
         <div className="flex justify-between items-center mb-3">
           <div className="flex items-center">
-            <span className={`font-semibold ${isDark ? 'text-white' : 'text-cricket-darkGray'}`}>{match.teams.home.team}</span>
+            <span className={`font-semibold ${isDark ? 'text-white' : 'text-cricket-darkGray'} truncate max-w-[160px]`}>{match.teams.home.team}</span>
           </div>
           <span className={`font-bold ${isDark ? 'text-white' : 'text-cricket-darkGray'}`}>{match.teams.home.score}</span>
         </div>
@@ -90,7 +90,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
         {/* Team 2 */}
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center">
-            <span className={`font-semibold ${isDark ? 'text-white' : 'text-cricket-darkGray'}`}>{match.teams.away.team}</span>
+            <span className={`font-semibold ${isDark ? 'text-white' : 'text-cricket-darkGray'} truncate max-w-[160px]`}>{match.teams.away.team}</span>
           </div>
           <span className={`font-bold ${isDark ? 'text-white' : 'text-cricket-darkGray'}`}>{match.teams.away.score}</span>
         </div>

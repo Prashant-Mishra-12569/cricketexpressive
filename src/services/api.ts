@@ -1,4 +1,3 @@
-
 import { toast } from "sonner";
 
 export interface TeamScore {
@@ -28,6 +27,7 @@ export interface NewsItem {
   author: string;
   publishedAt: string;
   category: string;
+  content?: string;
 }
 
 // Cricket API configuration
@@ -89,7 +89,7 @@ const DUMMY_NEWS: NewsItem[] = [
   {
     id: "n1",
     title: "Warner announces retirement from all forms of cricket after IPL 2025",
-    summary: "Australian legend David Warner will hang up his boots after the upcoming IPL season",
+    summary: "Australian legend David Warner will hang up his boots after the upcoming IPL season, ending a glittering career spanning two decades",
     imageUrl: "/lovable-uploads/5ee4703b-101e-49a7-8644-197841f3897c.png",
     author: "CricketExpress Staff",
     publishedAt: "2 hrs ago",
@@ -98,7 +98,7 @@ const DUMMY_NEWS: NewsItem[] = [
   {
     id: "n2",
     title: "Indian captain backs youngsters ahead of Champions Trophy",
-    summary: "The Indian captain stressed the importance of nurturing new talent for the upcoming ICC tournament",
+    summary: "The Indian captain stressed the importance of nurturing new talent for the upcoming ICC tournament and believes in their potential",
     imageUrl: "/lovable-uploads/918272bd-174f-4673-8c35-ca6fea65ba52.png",
     author: "Rajesh Kumar",
     publishedAt: "14 hrs ago",
@@ -107,7 +107,7 @@ const DUMMY_NEWS: NewsItem[] = [
   {
     id: "n3",
     title: "Chennai Super Kings trust in continuity for IPL 2025",
-    summary: "The franchise has retained its core players for the upcoming season",
+    summary: "The franchise has retained its core players for the upcoming season, focusing on team chemistry and proven performers",
     imageUrl: "/lovable-uploads/40109b02-0ca3-472b-9dbd-92637a446eb1.png",
     author: "Vikram Singh",
     publishedAt: "23 hrs ago",
@@ -116,7 +116,7 @@ const DUMMY_NEWS: NewsItem[] = [
   {
     id: "n4",
     title: "Starc: 'Looking forward to bowling in Indian conditions again'",
-    summary: "The Australian pacer expressed excitement about the upcoming tour of India",
+    summary: "The Australian pacer expressed excitement about the upcoming tour of India and is preparing specially for subcontinental pitches",
     imageUrl: "/lovable-uploads/74a318dd-87c9-49b1-818d-b7e22533cd11.png",
     author: "Andrew Mitchell",
     publishedAt: "19 hrs ago",
@@ -125,7 +125,7 @@ const DUMMY_NEWS: NewsItem[] = [
   {
     id: "n5",
     title: "Pakistan announces squad for Champions Trophy 2025",
-    summary: "New faces included as Pakistan aims for their second Champions Trophy title",
+    summary: "New faces included as Pakistan aims for their second Champions Trophy title with a mix of experience and young talent",
     imageUrl: "/lovable-uploads/5e53f18f-c6fa-4c89-b9e3-efe4bc72c9ea.png",
     author: "Hassan Khan",
     publishedAt: "5 hrs ago",
@@ -134,11 +134,65 @@ const DUMMY_NEWS: NewsItem[] = [
   {
     id: "n6",
     title: "Women's World Cup 2025: Full schedule announced",
-    summary: "ICC releases the complete fixtures for the upcoming Women's World Cup",
-    imageUrl: "/lovable-uploads/5e53f18f-c6fa-4c89-b9e3-efe4bc72c9ea.png",
+    summary: "ICC releases the complete fixtures for the upcoming Women's World Cup with Australia looking to defend their title",
+    imageUrl: "/lovable-uploads/5ee4703b-101e-49a7-8644-197841f3897c.png",
     author: "CricketExpress Staff",
     publishedAt: "7 hrs ago",
     category: "Women's Cricket"
+  },
+  {
+    id: "n7",
+    title: "IPL 2025 auction: Top 5 most expensive players",
+    summary: "A look at the biggest buys from the recent IPL auction as franchises splashed the cash on star performers",
+    imageUrl: "/lovable-uploads/e7d840d2-b6d0-459b-a3a3-5bd73dba393e.png",
+    author: "Rahul Desai",
+    publishedAt: "3 hrs ago",
+    category: "IPL"
+  },
+  {
+    id: "n8",
+    title: "England's strategic shift in white-ball approach under new coach",
+    summary: "England's new white-ball coach brings fresh perspectives as they prepare for the upcoming ICC tournaments",
+    imageUrl: "/lovable-uploads/40109b02-0ca3-472b-9dbd-92637a446eb1.png",
+    author: "James Anderson",
+    publishedAt: "10 hrs ago",
+    category: "News"
+  },
+  {
+    id: "n9",
+    title: "New Zealand's tour of India: Complete fixtures and squad announced",
+    summary: "The Black Caps prepare for a challenging tour with three Tests and five T20Is against a strong Indian side",
+    imageUrl: "/lovable-uploads/918272bd-174f-4673-8c35-ca6fea65ba52.png",
+    author: "Michael Clarke",
+    publishedAt: "1 day ago",
+    category: "News"
+  },
+  {
+    id: "n10",
+    title: "ICC introduces new playing conditions for T20 World Cup 2026",
+    summary: "Several rule changes have been announced for the next T20 World Cup to make the game more exciting and balanced",
+    imageUrl: "/lovable-uploads/74a318dd-87c9-49b1-818d-b7e22533cd11.png",
+    author: "CricketExpress Staff",
+    publishedAt: "8 hrs ago",
+    category: "News"
+  },
+  {
+    id: "n11",
+    title: "Harmanpreet Kaur breaks Virat Kohli's T20I record",
+    summary: "Indian women's captain surpasses Kohli's record for most T20I half-centuries in a calendar year",
+    imageUrl: "/lovable-uploads/5e53f18f-c6fa-4c89-b9e3-efe4bc72c9ea.png",
+    author: "Sharda Ugra",
+    publishedAt: "12 hrs ago",
+    category: "Women's Cricket"
+  },
+  {
+    id: "n12",
+    title: "South Africa unveils new domestic cricket structure ahead of 2026 season",
+    summary: "Cricket South Africa implements a revamped domestic structure to strengthen the national team's talent pipeline",
+    imageUrl: "/lovable-uploads/e7d840d2-b6d0-459b-a3a3-5bd73dba393e.png",
+    author: "Allan Donald",
+    publishedAt: "1 day ago",
+    category: "News"
   }
 ];
 
@@ -225,7 +279,6 @@ export const fetchMatchById = async (id: string): Promise<Match | null> => {
   }
 };
 
-// WordPress integration functions
 export const createWordPressPost = async (postData: any): Promise<any> => {
   try {
     // This would send a POST request to the WordPress REST API in a real implementation
@@ -242,5 +295,60 @@ export const createWordPressPost = async (postData: any): Promise<any> => {
       success: false,
       message: "Failed to create WordPress post"
     };
+  }
+};
+
+export const fetchBlogPosts = async (category?: string, limit: number = 10): Promise<NewsItem[]> => {
+  try {
+    // This would be a real WordPress REST API call in production
+    console.log(`Fetching blog posts for category: ${category || 'all'}, limit: ${limit}`);
+    
+    // Filter by category if provided
+    let filteredPosts = [...DUMMY_NEWS];
+    if (category) {
+      filteredPosts = filteredPosts.filter(post => 
+        post.category.toLowerCase() === category.toLowerCase()
+      );
+    }
+    
+    // Return limited number of posts
+    return filteredPosts.slice(0, limit);
+  } catch (error) {
+    console.error("Error fetching blog posts:", error);
+    toast.error("Failed to fetch blog posts");
+    return [];
+  }
+};
+
+export const fetchFeaturedPosts = async (limit: number = 5): Promise<NewsItem[]> => {
+  try {
+    // This would be a WordPress REST API call with featured flag in production
+    console.log(`Fetching featured posts, limit: ${limit}`);
+    
+    // For the demo, we'll just return some posts as "featured"
+    const featuredIds = ["n1", "n3", "n5", "n7", "n11"];
+    const featuredPosts = DUMMY_NEWS.filter(post => featuredIds.includes(post.id));
+    
+    return featuredPosts.slice(0, limit);
+  } catch (error) {
+    console.error("Error fetching featured posts:", error);
+    toast.error("Failed to fetch featured posts");
+    return [];
+  }
+};
+
+export const fetchPostBySlug = async (slug: string): Promise<NewsItem | null> => {
+  try {
+    // This would be a WordPress REST API call by slug in production
+    console.log(`Fetching post by slug: ${slug}`);
+    
+    // For the demo, we'll treat the ID as slug
+    const post = DUMMY_NEWS.find(p => p.id === slug);
+    
+    return post || null;
+  } catch (error) {
+    console.error(`Error fetching post with slug ${slug}:`, error);
+    toast.error("Failed to fetch post details");
+    return null;
   }
 };
