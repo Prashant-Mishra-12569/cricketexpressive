@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { Match } from '../services/api';
 import { Badge } from '@/components/ui/badge';
 import { ChevronRight, Trophy } from 'lucide-react';
+import { useTheme } from '@/hooks/use-theme';
 
 interface MatchCardProps {
   match: Match;
@@ -11,6 +12,9 @@ interface MatchCardProps {
 }
 
 const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   // Determine if match is completed
   const isCompleted = match.status.toLowerCase() === 'result' || 
                      match.status.toLowerCase() === 'completed' ||
@@ -31,14 +35,14 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
     if (match.result.includes('won by')) {
       const teamName = match.result.split(' won by')[0];
       return (
-        <div className="text-xs bg-white/20 p-2 mb-3 rounded-md">
+        <div className={`text-xs ${isDark ? 'bg-white/10' : 'bg-white/20'} p-2 mb-3 rounded-md`}>
           {teamName} won by {match.result.split('won by ')[1]}
         </div>
       );
     }
     
     return (
-      <div className="text-xs bg-white/20 p-2 mb-3 rounded-md">
+      <div className={`text-xs ${isDark ? 'bg-white/10' : 'bg-white/20'} p-2 mb-3 rounded-md`}>
         {match.result}
       </div>
     );
@@ -46,8 +50,12 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
 
   return (
     <div 
-      className={`match-card rounded-lg overflow-hidden transition-all duration-300 h-full bg-white shadow-sm hover:shadow-md ${
-        highlight ? 'border-l-4 border-l-cricket-blue' : ''
+      className={`match-card rounded-lg overflow-hidden transition-all duration-300 h-full ${
+        isDark 
+          ? 'bg-gray-800 border-gray-700 shadow-sm hover:shadow-md' 
+          : 'bg-white shadow-sm hover:shadow-md'
+      } ${
+        highlight ? `border-l-4 ${isDark ? 'border-l-cricket-blue/80' : 'border-l-cricket-blue'}` : ''
       }`}
     >
       <div className="bg-cricket-blue text-white text-xs font-semibold px-4 py-2">
@@ -74,17 +82,17 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
         {/* Team 1 */}
         <div className="flex justify-between items-center mb-3">
           <div className="flex items-center">
-            <span className="font-semibold text-cricket-darkGray">{match.teams.home.team}</span>
+            <span className={`font-semibold ${isDark ? 'text-white' : 'text-cricket-darkGray'}`}>{match.teams.home.team}</span>
           </div>
-          <span className="text-cricket-darkGray font-bold">{match.teams.home.score}</span>
+          <span className={`font-bold ${isDark ? 'text-white' : 'text-cricket-darkGray'}`}>{match.teams.home.score}</span>
         </div>
 
         {/* Team 2 */}
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center">
-            <span className="font-semibold text-cricket-darkGray">{match.teams.away.team}</span>
+            <span className={`font-semibold ${isDark ? 'text-white' : 'text-cricket-darkGray'}`}>{match.teams.away.team}</span>
           </div>
-          <span className="text-cricket-darkGray font-bold">{match.teams.away.score}</span>
+          <span className={`font-bold ${isDark ? 'text-white' : 'text-cricket-darkGray'}`}>{match.teams.away.score}</span>
         </div>
 
         {/* Match Result - displayed at the bottom for standard results */}
@@ -96,7 +104,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
         )}
 
         {/* Links */}
-        <div className="flex flex-wrap text-xs text-cricket-darkGray border-t pt-3 mt-auto">
+        <div className={`flex flex-wrap text-xs ${isDark ? 'text-gray-300 border-gray-700' : 'text-cricket-darkGray border-gray-200'} border-t pt-3 mt-auto`}>
           <Link to={`/match/${match.id}`} className="flex items-center hover:text-cricket-blue transition-colors">
             View Match Details
             <ChevronRight size={14} />
