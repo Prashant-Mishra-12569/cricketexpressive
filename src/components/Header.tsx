@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { Search, Menu, X, User, ChevronDown, Settings, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +16,7 @@ import {
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const location = useLocation();
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -23,6 +24,10 @@ const Header = () => {
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
   };
 
   return (
@@ -109,47 +114,74 @@ const Header = () => {
         <nav className={`${isMenuOpen ? 'block' : 'hidden'} sm:block`}>
           <ul className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-6 text-sm font-medium">
             <li>
-              <Link to="/" className="text-cricket-darkGray hover:text-cricket-blue">
+              <Link 
+                to="/" 
+                className={`cricket-nav-link ${isActive('/') ? 'active' : ''}`}
+              >
                 Home
               </Link>
             </li>
             <li>
-              <Link to="/matches" className="text-cricket-darkGray hover:text-cricket-blue">
+              <Link 
+                to="/matches" 
+                className={`cricket-nav-link ${isActive('/matches') ? 'active' : ''}`}
+              >
                 Matches
               </Link>
             </li>
             <li>
-              <Link to="/series/ipl-2025" className="text-cricket-darkGray hover:text-cricket-blue">
+              <Link 
+                to="/ipl-2025" 
+                className={`cricket-nav-link ${isActive('/ipl-2025') ? 'active' : ''}`}
+              >
                 IPL 2025
               </Link>
             </li>
             <li>
-              <Link to="/news" className="text-cricket-darkGray hover:text-cricket-blue">
+              <Link 
+                to="/news" 
+                className={`cricket-nav-link ${isActive('/news') ? 'active' : ''}`}
+              >
                 News
               </Link>
             </li>
             <li>
-              <Link to="/series/wpl-2025" className="text-cricket-darkGray hover:text-cricket-blue">
+              <Link 
+                to="/wpl-2025" 
+                className={`cricket-nav-link ${isActive('/wpl-2025') ? 'active' : ''}`}
+              >
                 WPL 2025
               </Link>
             </li>
             <li>
-              <Link to="/series/world-cup" className="text-cricket-darkGray hover:text-cricket-blue">
+              <Link 
+                to="/series/world-cup" 
+                className={`cricket-nav-link ${isActive('/series/world-cup') ? 'active' : ''}`}
+              >
                 World Cup
               </Link>
             </li>
             <li>
-              <Link to="/photos" className="text-cricket-darkGray hover:text-cricket-blue">
+              <Link 
+                to="/photos" 
+                className={`cricket-nav-link ${isActive('/photos') ? 'active' : ''}`}
+              >
                 Photos
               </Link>
             </li>
             <li>
-              <Link to="/videos" className="text-cricket-darkGray hover:text-cricket-blue">
+              <Link 
+                to="/videos" 
+                className={`cricket-nav-link ${isActive('/videos') ? 'active' : ''}`}
+              >
                 Videos
               </Link>
             </li>
             <li>
-              <Link to="/rankings" className="text-cricket-darkGray hover:text-cricket-blue">
+              <Link 
+                to="/rankings" 
+                className={`cricket-nav-link ${isActive('/rankings') ? 'active' : ''}`}
+              >
                 Rankings
               </Link>
             </li>

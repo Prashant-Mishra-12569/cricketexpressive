@@ -34,54 +34,53 @@ export interface NewsItem {
 const CRICKET_API_KEY = "1008d947-ac1d-4a69-a135-897686252434";
 const CRICKET_API_BASE_URL = "https://api.cricapi.com/v1";
 
-// Fallback dummy data
+// Fallback dummy data for cricket matches representing current matches for 2025 season
 const DUMMY_MATCHES: Match[] = [
   {
     id: "m1",
-    type: "WPL",
+    type: "ODI",
     status: "RESULT",
-    venue: "Brabourne",
-    series: "Women's Premier League",
-    result: "MI Women won by 8 runs",
+    venue: "Wanderers Cricket Ground, Windhoek",
+    series: "Namibia vs Canada ODI Series 2025",
+    result: "Namibia won by 12 runs (2nd innings reduced to 43 ovs due to rain, DLS target 167)",
     teams: {
-      home: { team: "MI-W", score: "149/7" },
-      away: { team: "DC-W", score: "141/9" }
+      home: { team: "Canada", score: "186/10" },
+      away: { team: "Namibia", score: "154/10" }
     }
   },
   {
     id: "m2",
-    type: "T20I",
+    type: "T20",
     status: "RESULT",
-    venue: "Christchurch",
-    series: "New Zealand vs Pakistan",
-    result: "New Zealand won by 9 wickets (with 59 balls remaining)",
+    venue: "Bayuemas Oval, Kuala Lumpur",
+    series: "Malaysia vs Hong Kong T20 Series 2025",
+    result: "Hong Kong won by 8 wkts",
     teams: {
-      home: { team: "PAK", score: "91" },
-      away: { team: "NZ", score: "92/1" }
+      home: { team: "Malaysia", score: "94/10" },
+      away: { team: "Hong Kong", score: "95/2" }
     }
   },
   {
     id: "m3",
-    type: "T20I",
+    type: "T20",
     status: "RESULT",
-    venue: "Christchurch",
-    series: "New Zealand vs Sri Lanka Women",
-    result: "NZ Women won by 7 wickets (with 9 balls remaining)",
+    venue: "Miraj International Cricket Stadium, Udaipur",
+    series: "Sri Lanka vs Afghanistan T20 Series 2025",
+    result: "Sri Lankan Lions won by 26 runs",
     teams: {
-      home: { team: "SL-W", score: "113/7" },
-      away: { team: "NZ-W", score: "117/3" }
+      home: { team: "Sri Lankan Lions", score: "230/3" },
+      away: { team: "Afghanistan Pathans", score: "204/7" }
     }
   },
   {
     id: "m4",
-    type: "PM Cup",
-    status: "RESULT",
-    venue: "Siddharthanagar",
-    series: "Prime Minister Cup",
-    result: "Armed Police won by 5 wickets (with 64 balls remaining)",
+    type: "ODI",
+    status: "No result - due to rain",
+    venue: "Gaddafi Stadium, Lahore",
+    series: "Australia vs Afghanistan ODI Series 2025",
     teams: {
-      home: { team: "KAR", score: "189" },
-      away: { team: "APFC", score: "193/5" }
+      home: { team: "Afghanistan", score: "273/10" },
+      away: { team: "Australia", score: "109/3" }
     }
   }
 ];
@@ -89,55 +88,55 @@ const DUMMY_MATCHES: Match[] = [
 const DUMMY_NEWS: NewsItem[] = [
   {
     id: "n1",
-    title: "A Harmanpreet masterpiece brings second title to Mumbai",
-    summary: "MI Women won by 8 runs in the WPL final against DC",
+    title: "Warner announces retirement from all forms of cricket after IPL 2025",
+    summary: "Australian legend David Warner will hang up his boots after the upcoming IPL season",
     imageUrl: "/lovable-uploads/5ee4703b-101e-49a7-8644-197841f3897c.png",
-    author: "ESPNcricinfo Staff",
+    author: "CricketExpress Staff",
     publishedAt: "2 hrs ago",
-    category: "WPL"
+    category: "IPL"
   },
   {
     id: "n2",
-    title: "Kohli bats for families' presence on India's tours",
-    summary: "Kohli stressed the importance of having family support during long tours",
+    title: "Indian captain backs youngsters ahead of Champions Trophy",
+    summary: "The Indian captain stressed the importance of nurturing new talent for the upcoming ICC tournament",
     imageUrl: "/lovable-uploads/918272bd-174f-4673-8c35-ca6fea65ba52.png",
-    author: "Shashank Kishore",
+    author: "Rajesh Kumar",
     publishedAt: "14 hrs ago",
     category: "News"
   },
   {
     id: "n3",
-    title: "KKR trust in continuity in bid to defend 2024 title",
+    title: "Chennai Super Kings trust in continuity for IPL 2025",
     summary: "The franchise has retained its core players for the upcoming season",
     imageUrl: "/lovable-uploads/40109b02-0ca3-472b-9dbd-92637a446eb1.png",
-    author: "Sreshth Shah",
+    author: "Vikram Singh",
     publishedAt: "23 hrs ago",
     category: "IPL"
   },
   {
     id: "n4",
-    title: "Kohli: Experienced 'intense disappointment' after Aus tour",
-    summary: "The former India captain opened up about the challenging tour",
+    title: "Starc: 'Looking forward to bowling in Indian conditions again'",
+    summary: "The Australian pacer expressed excitement about the upcoming tour of India",
     imageUrl: "/lovable-uploads/74a318dd-87c9-49b1-818d-b7e22533cd11.png",
-    author: "Shashank Kishore",
+    author: "Andrew Mitchell",
     publishedAt: "19 hrs ago",
     category: "News"
   },
   {
     id: "n5",
-    title: "Pakistan 91 all out as post Babar-Rizwan era begins with a whimper",
-    summary: "New Zealand dominated the first T20I with a comprehensive victory",
+    title: "Pakistan announces squad for Champions Trophy 2025",
+    summary: "New faces included as Pakistan aims for their second Champions Trophy title",
     imageUrl: "/lovable-uploads/5e53f18f-c6fa-4c89-b9e3-efe4bc72c9ea.png",
-    author: "Abhimanyu Bose",
+    author: "Hassan Khan",
     publishedAt: "5 hrs ago",
     category: "News"
   },
   {
     id: "n6",
-    title: "NZ vs SL: Bates, Illing, Halliday star to level the series at 1-1",
-    summary: "New Zealand women bounced back in the second T20I",
+    title: "Women's World Cup 2025: Full schedule announced",
+    summary: "ICC releases the complete fixtures for the upcoming Women's World Cup",
     imageUrl: "/lovable-uploads/5e53f18f-c6fa-4c89-b9e3-efe4bc72c9ea.png",
-    author: "ESPNcricinfo Staff",
+    author: "CricketExpress Staff",
     publishedAt: "7 hrs ago",
     category: "Women's Cricket"
   }
@@ -173,15 +172,15 @@ export const fetchLiveMatches = async (): Promise<Match[]> => {
     }));
   } catch (error) {
     console.error("Error fetching live matches:", error);
-    toast.error("Failed to fetch live matches, using fallback data");
+    toast.error("Failed to fetch live matches from API, using fallback data");
     return DUMMY_MATCHES;
   }
 };
 
 export const fetchTopStories = async (): Promise<NewsItem[]> => {
-  // In a real implementation, this would fetch from an API
-  // For now, we'll return dummy data
+  // In a real implementation, this would fetch from a WordPress API
   try {
+    // Simulate WordPress API call with 2025 data
     return DUMMY_NEWS;
   } catch (error) {
     console.error("Error fetching top stories:", error);
@@ -227,24 +226,6 @@ export const fetchMatchById = async (id: string): Promise<Match | null> => {
 };
 
 // WordPress integration functions
-export const fetchWordPressContent = async (): Promise<any> => {
-  try {
-    // This would connect to a WordPress REST API in a real implementation
-    return {
-      success: true,
-      message: "Connected to WordPress API successfully"
-    };
-  } catch (error) {
-    console.error("Error connecting to WordPress:", error);
-    toast.error("Failed to connect to WordPress API");
-    return {
-      success: false,
-      message: "Failed to connect to WordPress API"
-    };
-  }
-};
-
-// Function to create WordPress compatible content
 export const createWordPressPost = async (postData: any): Promise<any> => {
   try {
     // This would send a POST request to the WordPress REST API in a real implementation

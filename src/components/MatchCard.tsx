@@ -24,6 +24,26 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
     return match.type.toUpperCase();
   };
 
+  // Extract result prefix to display at the top of the card
+  const getResultPrefix = () => {
+    if (!match.result) return null;
+    
+    if (match.result.includes('won by')) {
+      const teamName = match.result.split(' won by')[0];
+      return (
+        <div className="text-xs bg-white/20 p-2 mb-3 rounded-md">
+          {teamName} won by {match.result.split('won by ')[1]}
+        </div>
+      );
+    }
+    
+    return (
+      <div className="text-xs bg-white/20 p-2 mb-3 rounded-md">
+        {match.result}
+      </div>
+    );
+  };
+
   return (
     <div 
       className={`match-card rounded-lg overflow-hidden transition-all duration-300 h-full bg-white shadow-sm hover:shadow-md ${
@@ -36,7 +56,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
             <Badge variant="outline" className="bg-white/20 hover:bg-white/30 text-white border-none">
               {getMatchTypeLabel()}
             </Badge>
-            <span>{match.venue}</span>
+            <span>{match.venue.split(',')[0]}</span>
           </div>
           <Badge 
             variant={isCompleted ? "secondary" : "outline"} 
@@ -48,6 +68,9 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
       </div>
 
       <div className="p-4">
+        {/* Result prefix - displayed on top for special results */}
+        {getResultPrefix()}
+
         {/* Team 1 */}
         <div className="flex justify-between items-center mb-3">
           <div className="flex items-center">
@@ -64,8 +87,8 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
           <span className="text-cricket-darkGray font-bold">{match.teams.away.score}</span>
         </div>
 
-        {/* Match Result */}
-        {match.result && (
+        {/* Match Result - displayed at the bottom for standard results */}
+        {match.result && !getResultPrefix() && (
           <div className="text-sm text-cricket-blue flex items-center gap-1 mt-2 mb-4">
             <Trophy size={14} />
             <span>{match.result}</span>
