@@ -30,6 +30,11 @@ export interface NewsItem {
   category: string;
 }
 
+// Cricket API configuration
+const CRICKET_API_KEY = "1008d947-ac1d-4a69-a135-897686252434";
+const CRICKET_API_BASE_URL = "https://api.cricapi.com/v1";
+
+// Fallback dummy data
 const DUMMY_MATCHES: Match[] = [
   {
     id: "m1",
@@ -139,14 +144,37 @@ const DUMMY_NEWS: NewsItem[] = [
 ];
 
 export const fetchLiveMatches = async (): Promise<Match[]> => {
-  // In a real implementation, this would fetch from an API
-  // For now, we'll return dummy data
   try {
-    return DUMMY_MATCHES;
+    const response = await fetch(`${CRICKET_API_BASE_URL}/currentMatches?apikey=${CRICKET_API_KEY}&offset=0`);
+    const data = await response.json();
+    
+    if (data.status !== "success") {
+      throw new Error(data.message || "Failed to fetch live matches");
+    }
+    
+    // Transform the API response to match our interface
+    return data.data.map((match: any) => ({
+      id: match.id || String(Math.random()),
+      type: match.matchType || match.format || "Unknown",
+      status: match.status || "LIVE",
+      venue: match.venue || "Unknown Venue",
+      series: match.name || match.teamInfo?.[0]?.name || "Cricket Series",
+      result: match.status === "completed" ? `${match.teams?.[0]} won` : undefined,
+      teams: {
+        home: { 
+          team: match.teams?.[0] || "Team A", 
+          score: match.score?.[0]?.r ? `${match.score[0].r}/${match.score[0].w || 0}` : "0/0"
+        },
+        away: { 
+          team: match.teams?.[1] || "Team B", 
+          score: match.score?.[1]?.r ? `${match.score[1].r}/${match.score[1].w || 0}` : "0/0"
+        }
+      }
+    }));
   } catch (error) {
     console.error("Error fetching live matches:", error);
-    toast.error("Failed to fetch live matches");
-    return [];
+    toast.error("Failed to fetch live matches, using fallback data");
+    return DUMMY_MATCHES;
   }
 };
 
@@ -163,23 +191,75 @@ export const fetchTopStories = async (): Promise<NewsItem[]> => {
 };
 
 export const fetchMatchById = async (id: string): Promise<Match | null> => {
-  // In a real implementation, this would fetch from an API
-  // For now, we'll search our dummy data
   try {
-    const match = DUMMY_MATCHES.find(m => m.id === id);
-    return match || null;
+    const response = await fetch(`${CRICKET_API_BASE_URL}/match_info?apikey=${CRICKET_API_KEY}&id=${id}`);
+    const data = await response.json();
+    
+    if (data.status !== "success") {
+      throw new Error(data.message || "Failed to fetch match details");
+    }
+    
+    const match = data.data;
+    return {
+      id: match.id || id,
+      type: match.matchType || match.format || "Unknown",
+      status: match.status || "LIVE",
+      venue: match.venue || "Unknown Venue",
+      series: match.name || match.teamInfo?.[0]?.name || "Cricket Series",
+      result: match.status === "completed" ? `${match.teams?.[0]} won` : undefined,
+      teams: {
+        home: { 
+          team: match.teams?.[0] || "Team A", 
+          score: match.score?.[0]?.r ? `${match.score[0].r}/${match.score[0].w || 0}` : "0/0"
+        },
+        away: { 
+          team: match.teams?.[1] || "Team B", 
+          score: match.score?.[1]?.r ? `${match.score[1].r}/${match.score[1].w || 0}` : "0/0"
+        }
+      }
+    };
   } catch (error) {
     console.error(`Error fetching match with id ${id}:`, error);
-    toast.error("Failed to fetch match details");
-    return null;
+    toast.error("Failed to fetch match details, using fallback data");
+    const match = DUMMY_MATCHES.find(m => m.id === id);
+    return match || null;
   }
 };
 
-// This would connect to WordPress API in a real implementation
+// WordPress integration functions
 export const fetchWordPressContent = async (): Promise<any> => {
-  // Simulating WordPress API connection
-  return {
-    success: true,
-    message: "Connected to WordPress API successfully"
-  };
+  try {
+    // This would connect to a WordPress REST API in a real implementation
+    return {
+      success: true,
+      message: "Connected to WordPress API successfully"
+    };
+  } catch (error) {
+    console.error("Error connecting to WordPress:", error);
+    toast.error("Failed to connect to WordPress API");
+    return {
+      success: false,
+      message: "Failed to connect to WordPress API"
+    };
+  }
+};
+
+// Function to create WordPress compatible content
+export const createWordPressPost = async (postData: any): Promise<any> => {
+  try {
+    // This would send a POST request to the WordPress REST API in a real implementation
+    console.log("Creating WordPress post:", postData);
+    return {
+      success: true,
+      message: "Post created successfully",
+      postId: Math.floor(Math.random() * 1000)
+    };
+  } catch (error) {
+    console.error("Error creating WordPress post:", error);
+    toast.error("Failed to create WordPress post");
+    return {
+      success: false,
+      message: "Failed to create WordPress post"
+    };
+  }
 };

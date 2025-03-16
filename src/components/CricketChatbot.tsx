@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { MessageCircle, Send, X, Minimize2, Maximize2 } from 'lucide-react';
+import { toast } from 'sonner';
 
 interface ChatMessage {
   text: string;
@@ -40,7 +41,72 @@ const CricketChatbot = () => {
     setIsMinimized(!isMinimized);
   };
   
-  const handleSend = () => {
+  const processWithGemini = async (userMessage: string) => {
+    try {
+      // This would be the actual Gemini API call in production
+      // For demonstration, we'll simulate the API call
+      
+      // In production, you would make a call like:
+      // const response = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //     'Authorization': `Bearer ${GEMINI_API_KEY}`
+      //   },
+      //   body: JSON.stringify({
+      //     contents: [
+      //       {
+      //         role: 'user',
+      //         parts: [{ text: `Answer only cricket-related questions. If not cricket-related, politely decline. Question: ${userMessage}` }]
+      //       }
+      //     ]
+      //   })
+      // });
+      // const data = await response.json();
+      // return data.candidates[0].content.parts[0].text;
+      
+      // For now, we'll simulate a response
+      await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API latency
+      
+      const lowerCaseMsg = userMessage.toLowerCase();
+      
+      // Handle greetings
+      if (lowerCaseMsg.includes('hi') || lowerCaseMsg.includes('hello')) {
+        return "Hello there! I'm your cricket assistant. How can I help you with cricket today?";
+      }
+      
+      // Check if query is cricket-related
+      const cricketKeywords = ['cricket', 'ipl', 'odi', 't20', 'test match', 'bowler', 'batsman', 'wicket', 'run', 
+                          'score', 'match', 'player', 'team', 'series', 'world cup', 'stadium', 'pitch', 
+                          'boundary', 'over', 'innings', 'captain'];
+      
+      const isCricketRelated = cricketKeywords.some(keyword => lowerCaseMsg.includes(keyword));
+      
+      if (!isCricketRelated) {
+        return "I'm specialized in cricket! Please ask me something related to cricket matches, players, statistics, or tournaments.";
+      }
+      
+      // Cricket-related responses
+      if (lowerCaseMsg.includes('ipl')) {
+        return "The Indian Premier League (IPL) 2025 season is scheduled to start in March and will feature 10 teams competing for the championship. The defending champions are Kolkata Knight Riders, who defeated Sunrisers Hyderabad in the 2024 final.";
+      } else if (lowerCaseMsg.includes('world cup')) {
+        return "The next ICC Cricket World Cup is scheduled for 2027 and will be co-hosted by South Africa, Zimbabwe and Namibia. Australia are the current champions, having won the 2023 tournament held in India.";
+      } else if (lowerCaseMsg.includes('india') || lowerCaseMsg.includes('team india')) {
+        return "The Indian cricket team is currently ranked among the top teams in all formats. They recently competed in a Test series against Australia. Rohit Sharma is the current captain in all formats.";
+      } else if (lowerCaseMsg.includes('schedule') || lowerCaseMsg.includes('upcoming')) {
+        return "There are several exciting cricket series coming up in 2025, including the Ashes series, India's tour of England, and the T20 World Cup qualifiers. Would you like more specific information about any of these tournaments?";
+      } else if (lowerCaseMsg.includes('player') || lowerCaseMsg.includes('batsman') || lowerCaseMsg.includes('bowler')) {
+        return "There are many outstanding cricket players currently active. Players like Virat Kohli, Kane Williamson, Jos Buttler, Jasprit Bumrah, and Pat Cummins are among the top performers. Did you want to know about a specific player?";
+      } else {
+        return "That's an interesting cricket question! In the 2025 season, we're seeing some exciting developments in cricket around the world. Teams are implementing new strategies and players are breaking records. Is there something specific about current cricket you'd like to know?";
+      }
+    } catch (error) {
+      console.error('Error communicating with Gemini:', error);
+      return "I'm having trouble connecting to my knowledge base right now. Please try again in a moment.";
+    }
+  };
+  
+  const handleSend = async () => {
     if (!input.trim()) return;
     
     // Add user message
@@ -53,34 +119,32 @@ const CricketChatbot = () => {
     // Clear input
     setInput('');
     
-    // Simulate loading
+    // Show loading state
     setIsLoading(true);
     
-    // Simulate API response (would be replaced with actual Gemini API call)
-    setTimeout(() => {
-      let response = '';
+    try {
+      // Process with Gemini API
+      const response = await processWithGemini(input);
       
-      // Very basic response logic - would be replaced by Gemini
-      if (input.toLowerCase().includes('ipl')) {
-        response = "The Indian Premier League (IPL) is a professional Twenty20 cricket league in India contested during April and May each year by teams representing Indian cities.";
-      } else if (input.toLowerCase().includes('world cup')) {
-        response = "The ICC Cricket World Cup is the international championship of One Day International cricket. The tournament is held every four years, with the next one scheduled for 2027.";
-      } else if (input.toLowerCase().includes('who is') || input.toLowerCase().includes('player') || input.toLowerCase().includes('batsman') || input.toLowerCase().includes('bowler')) {
-        response = "I can provide information about cricket players, their stats, and career highlights. Could you specify which player you're interested in?";
-      } else if (!input.toLowerCase().includes('cricket') && !input.toLowerCase().includes('match') && !input.toLowerCase().includes('score') && !input.toLowerCase().includes('team')) {
-        response = "I'm a cricket-specific assistant. I can help you with cricket-related questions about players, matches, tournaments, and stats!";
-      } else {
-        response = "That's an interesting cricket question! In a real implementation, I would fetch this information from the latest cricket databases. Is there anything specific about cricket you'd like to know?";
-      }
-      
+      // Add bot response
       setMessages(prev => [...prev, {
         text: response,
         isUser: false,
         timestamp: new Date()
       }]);
+    } catch (error) {
+      console.error('Chatbot error:', error);
+      toast.error('Sorry, I encountered an error processing your request.');
       
+      // Add error message
+      setMessages(prev => [...prev, {
+        text: "I'm having trouble processing your request right now. Please try again later.",
+        isUser: false,
+        timestamp: new Date()
+      }]);
+    } finally {
       setIsLoading(false);
-    }, 1500);
+    }
   };
   
   const handleKeyPress = (e: React.KeyboardEvent) => {

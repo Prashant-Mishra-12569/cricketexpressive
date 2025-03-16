@@ -2,6 +2,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Match } from '../services/api';
+import { Badge } from '@/components/ui/badge';
+import { ChevronRight, Trophy } from 'lucide-react';
 
 interface MatchCardProps {
   match: Match;
@@ -9,15 +11,39 @@ interface MatchCardProps {
 }
 
 const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
+  // Determine if match is completed
+  const isCompleted = match.status.toLowerCase() === 'result' || 
+                     match.status.toLowerCase() === 'completed' ||
+                     match.status.toLowerCase().includes('won');
+  
+  // Format match type label
+  const getMatchTypeLabel = () => {
+    if (match.type.toLowerCase().includes('t20')) return 'T20';
+    if (match.type.toLowerCase().includes('odi')) return 'ODI';
+    if (match.type.toLowerCase().includes('test')) return 'TEST';
+    return match.type.toUpperCase();
+  };
+
   return (
     <div 
-      className={`match-card overflow-hidden transition-all duration-300 h-full ${
+      className={`match-card rounded-lg overflow-hidden transition-all duration-300 h-full bg-white shadow-sm hover:shadow-md ${
         highlight ? 'border-l-4 border-l-cricket-blue' : ''
       }`}
     >
       <div className="bg-cricket-blue text-white text-xs font-semibold px-4 py-2">
         <div className="flex justify-between items-center">
-          <span>{match.status} • {match.type} • {match.venue}</span>
+          <div className="flex items-center gap-2">
+            <Badge variant="outline" className="bg-white/20 hover:bg-white/30 text-white border-none">
+              {getMatchTypeLabel()}
+            </Badge>
+            <span>{match.venue}</span>
+          </div>
+          <Badge 
+            variant={isCompleted ? "secondary" : "outline"} 
+            className={isCompleted ? "bg-white/90 text-cricket-blue" : "bg-white/20 text-white border-none"}
+          >
+            {match.status}
+          </Badge>
         </div>
       </div>
 
@@ -40,16 +66,18 @@ const MatchCard: React.FC<MatchCardProps> = ({ match, highlight = false }) => {
 
         {/* Match Result */}
         {match.result && (
-          <div className="text-sm text-cricket-darkGray mt-2 mb-4">{match.result}</div>
+          <div className="text-sm text-cricket-blue flex items-center gap-1 mt-2 mb-4">
+            <Trophy size={14} />
+            <span>{match.result}</span>
+          </div>
         )}
 
         {/* Links */}
         <div className="flex flex-wrap text-xs text-cricket-darkGray border-t pt-3 mt-auto">
-          <Link to={`/match/${match.id}/schedule`} className="mr-4 hover:text-cricket-blue">Schedule</Link>
-          <Link to={`/match/${match.id}/table`} className="mr-4 hover:text-cricket-blue">Table</Link>
-          <Link to={`/match/${match.id}/report`} className="mr-4 hover:text-cricket-blue">Report</Link>
-          <Link to={`/match/${match.id}/videos`} className="mr-4 hover:text-cricket-blue">Videos</Link>
-          <Link to={`/match/${match.id}/series`} className="hover:text-cricket-blue">Series</Link>
+          <Link to={`/match/${match.id}`} className="flex items-center hover:text-cricket-blue transition-colors">
+            View Match Details
+            <ChevronRight size={14} />
+          </Link>
         </div>
       </div>
     </div>
